@@ -1,0 +1,54 @@
+server:
+  port: 8082
+
+spring:
+  # datasource:
+  #   url: jdbc:postgresql://${POSTGRES_URL:localhost:5432}/shippingdb
+  #   username: postgres
+  #   password: postgres
+  #   driver-class-name: org.postgresql.Driver
+
+
+
+  # jpa:
+  #   show-sql: true
+  #   hibernate:
+  #     ddl-auto: update
+  #   properties:
+  #     hibernate:
+  #       dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  datasource:
+    url: ${DATASOURCE_URL:jdbc:h2:mem:shippingdb}
+    username: ${DATASOURCE_USERNAME:sa}
+    password: ${DATASOURCE_PASSWORD:password}
+    driver-class-name: ${DATASOURCE_DRIVER:org.h2.Driver}
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: ${JPA_HIBERNATE_DDL_AUTO:update}
+    properties:
+      hibernate:
+        dialect: ${JPA_HIBERNATE_DIALECT:org.hibernate.dialect.H2Dialect}
+
+  kafka:
+   bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+   consumer:
+    bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+  cloud:
+    stream:
+      bindings:
+        onOrderCreation-in-0:
+          destination: ship-order
+          group: shippingConsumerGroup
+      kafka:
+        binder:
+          brokers: ${SPRING_KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+
+
+
+  h2:
+    console:
+      enabled: true
+      settings.web-allow-others: true
