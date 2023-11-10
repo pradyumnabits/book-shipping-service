@@ -1,0 +1,67 @@
+openapi: 3.0.1
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+  - url: http://localhost:8082
+    description: Generated server url
+paths:
+  /api/v1/shipping:
+    post:
+      tags:
+        - shipping-controller
+      operationId: initiateShipping
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShippingData'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ShippingData'
+  /api/v1/shipping/{orderId}:
+    get:
+      tags:
+        - shipping-controller
+      operationId: getShippingData
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ShippingData'
+components:
+  schemas:
+    ShippingData:
+      required:
+        - orderId
+      type: object
+      properties:
+        shippingId:
+          type: integer
+          format: int64
+        orderId:
+          type: integer
+          format: int64
+        emailId:
+          type: string
+        address:
+          type: string
+        shippingStatus:
+          type: string
+          enum:
+            - SHIPPING_INITIATED
+            - SHIPPING_COMPLETE
